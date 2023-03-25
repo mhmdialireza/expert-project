@@ -116,7 +116,7 @@
                             background: dark != 'true' ? '#fff' : '#1A1C23',
                             showCloseButton: true,
                             inputAttributes: {
-                                maxlength: 10,
+                                // maxlength: 10,
                                 autocapitalize: 'off',
                                 autocorrect: 'off',
                             }

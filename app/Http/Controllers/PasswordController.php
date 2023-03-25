@@ -17,7 +17,10 @@ class PasswordController extends Controller
     public function index()
     {
         $passwords = Auth::user()->passwords()->where('folder_id', null)->get();
-        $folders = Auth::user()->folders()->where('type', 3)->get();
+        $folders = Auth::user()->folders()
+        ->where('parent_id', null)
+        ->where('type', 3)
+        ->get();
         $from = $this->from;
 
         return view('pages.password.index', compact('folders', 'passwords', 'from'));

@@ -23,6 +23,20 @@
         @if ($errors->has('type'))
             <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('type') }}</span>
         @endif
+        <label class="block mt-6 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">folder</span>
+            <select name="parent_id"
+                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                <option value="0">-</option>
+                @foreach ($folders as $folder)
+                    <option value="{{ $folder->id }}" @if (old('parent_id') == $folder->id) selected @endif>
+                        {{ $folder->name }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('parent_id'))
+                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('folder_id') }}</span>
+            @endif
+        </label>
         <div class="mt-6 pb-2">
             <button type="submit"
                 class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">

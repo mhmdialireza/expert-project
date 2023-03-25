@@ -23,8 +23,8 @@ class AuthController extends Controller
             'password' => $request->all()['password'],
         ];
 
-        if (Auth::attempt($credential)) {
-            toast('you logged in!', 'success')->timerProgressBar();
+        if (Auth::attempt($credential, true)) {
+            // toast('you logged in!', 'success')->timerProgressBar()->background('#000');
             return redirect()->route('home');
         }
 
@@ -50,7 +50,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        toast('you logged out!', 'success')->timerProgressBar();
+        // toast('you logged out!', 'success')->timerProgressBar()->background('#000');
 
         return redirect()->route('login');
     }

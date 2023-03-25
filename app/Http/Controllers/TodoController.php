@@ -16,7 +16,10 @@ class TodoController extends Controller
     public function index()
     {
         $todos = Auth::user()->todos()->where('folder_id', null)->get();
-        $folders = Auth::user()->folders()->where('type', 1)->get();
+        $folders = Auth::user()->folders()
+        ->where('parent_id', null)
+        ->where('type', 1)
+        ->get();
         $from = $this->from;
 
         return view('pages.todo.index', compact('folders', 'todos', 'from'));

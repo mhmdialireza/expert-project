@@ -16,6 +16,20 @@
                 <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('name') }}</span>
             @endif
         </label>
+        <label class="block mt-6 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">folder</span>
+            <select name="parent_id"
+                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                <option value="0">-</option>
+                @foreach ($folders as $folder)
+                    <option value="{{ $folder->id }}" @if ($folder->parent && $folder->parent == $folder->parent) selected @endif>
+                        {{ $folder->name }}</option>
+                @endforeach
+            </select>
+            @if ($errors->has('parent_id'))
+                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('parent_id') }}</span>
+            @endif
+        </label>
         <input id="dark-input" name='dark' type="hidden" x-model='dark'>
         <div class="mt-6 mr-2 pb-2 inline-block">
             <button type="submit"

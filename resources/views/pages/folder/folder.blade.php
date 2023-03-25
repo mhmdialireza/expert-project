@@ -5,6 +5,39 @@
                 $todos = $items;
             @endphp
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}'s Todos</h2>
+            @if (count($folders))
+                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Folders</h4>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    @foreach ($folders as $folder)
+                        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                            <div class="p-3 mr-4 rounded-full text-white bg-purple-600 active:bg-purple-600 hover:bg-purple-700">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('folder.show', $folder->id) }}">
+                                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}</p>
+                                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">include:
+                                    {{ $folder->include }}</p>
+                            </a>
+
+                            <div class="ml-auto">
+                                <a href="{{ route('folder.edit', $folder->id) }}"
+                                    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                    Info
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            @if (count($folders) && count($todos))
+                <hr class="mb-4">
+            @endif
+
             @if (count($todos))
                 <div class="w-full overflow-hidden rounded-lg shadow-xs mb-4">
                     <div class="w-full overflow-x-auto">
@@ -91,6 +124,40 @@
                 $bookmarks = $items;
             @endphp
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}'s Bookmarks</h2>
+            @if (count($folders))
+                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Folders</h4>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    @foreach ($folders as $folder)
+                        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                            <div
+                                class="p-3 mr-4 rounded-full text-white bg-purple-600 active:bg-purple-600 hover:bg-purple-700">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('folder.show', $folder->id) }}">
+                                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}</p>
+                                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                                    include:{{ $folder->include }}</p>
+                            </a>
+
+                            <div class="ml-auto">
+                                <a href="{{ route('folder.edit', $folder->id) }}"
+                                    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                    Info
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            @if (count($folders) && count($bookmarks))
+                <hr class="mb-4">
+            @endif
+
             @if (count($bookmarks))
                 <div class="w-full overflow-hidden rounded-lg shadow-xs mb-4">
                     <div class="w-full overflow-x-auto">
@@ -145,6 +212,40 @@
             <input id="dark-input" name='dark' type="hidden" x-model='dark'>
 
             <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}'s Passwords</h2>
+            @if (count($folders))
+                <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Folders</h4>
+                <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
+                    @foreach ($folders as $folder)
+                        <div class="flex items-center p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+                            <div
+                                class="p-3 mr-4 rounded-full text-white bg-purple-600 active:bg-purple-600 hover:bg-purple-700">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <a href="{{ route('folder.show', $folder->id) }}">
+                                <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{ $folder->name }}</p>
+                                <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">include:
+                                    {{ $folder->include }}</p>
+                            </a>
+
+                            <div class="ml-auto">
+                                <a href="{{ route('folder.edit', $folder->id) }}"
+                                    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                                    Info
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            @if (count($passwords) && count($folders))
+                <hr class="mb-4">
+            @endif
+
             @if (count($passwords))
                 <div class="w-full overflow-hidden rounded-lg shadow-xs mb-4">
                     <div class="w-full overflow-x-auto">
@@ -214,7 +315,6 @@
                                     background: dark != 'true' ? '#fff' : '#1A1C23',
                                     showCloseButton: true,
                                     inputAttributes: {
-                                        maxlength: 10,
                                         autocapitalize: 'off',
                                         autocorrect: 'off',
                                     }

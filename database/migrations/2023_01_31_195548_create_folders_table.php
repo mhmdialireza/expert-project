@@ -19,6 +19,9 @@ return new class extends Migration
             $table->tinyInteger('type');
             $table->integer('include')->default(0);
             $table->foreignId('user_id')->constrained();
+
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')->references('id')->on('folders');
             $table->timestamps();
         });
     }

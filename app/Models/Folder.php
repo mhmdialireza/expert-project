@@ -9,8 +9,7 @@ class Folder extends Model
 {
     use HasFactory;
 
-    // protected $guarded = ['id'];
-    protected $fillable = ['name', 'include', 'type', 'user_id', 'is_done'];
+    protected $fillable = ['name', 'include', 'type', 'user_id', 'parent_id', 'is_done'];
 
     public function user()
     {
@@ -27,8 +26,18 @@ class Folder extends Model
         return $this->hasMany(Bookmark::class);
     }
 
-    public function Passwords()
+    public function passwords()
     {
         return $this->hasMany(Password::class);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Folder::class,'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Folder::class,'parent_id');
     }
 }

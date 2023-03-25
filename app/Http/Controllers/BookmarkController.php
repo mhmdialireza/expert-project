@@ -16,7 +16,10 @@ class BookmarkController extends Controller
     public function index()
     {
         $bookmarks = Auth::user()->bookmarks()->where('folder_id', null)->get();
-        $folders = Auth::user()->folders()->where('type', 2)->get();
+        $folders = Auth::user()->folders()
+        ->where('parent_id', null)
+        ->where('type', 2)
+        ->get();
         $from = $this->from;
 
         return view('pages.bookmark.index', compact('folders', 'bookmarks', 'from'));
