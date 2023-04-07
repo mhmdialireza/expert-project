@@ -26,6 +26,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3'],
+            'fcm_token' => ['nullable', 'string'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['min:4', 'string', 'required', 'confirmed'],
         ];

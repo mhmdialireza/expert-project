@@ -21,9 +21,9 @@
             <select name="parent_id"
                 class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                 <option value="0">-</option>
-                @foreach ($folders as $folder)
-                    <option value="{{ $folder->id }}" @if ($folder->parent && $folder->parent == $folder->parent) selected @endif>
-                        {{ $folder->name }}</option>
+                @foreach ($folders as $f)
+                    <option value="{{ $f->id }}" @if ($folder?->parent?->id && $f->id == $folder->parent->id) selected @endif>
+                        {{ $f->name }}</option>
                 @endforeach
             </select>
             @if ($errors->has('parent_id'))

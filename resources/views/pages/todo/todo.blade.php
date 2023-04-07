@@ -1,14 +1,14 @@
 <x-layout :$from>
     <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Todo Page</h2>
     <form method="POST" action="{{ route('todo.update', $todo->id) }}"
-        class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         @csrf
         @method('PUT')
         <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">Title</span>
             <input autocomplete="off"
-                class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Complete task" name="title" value="{{ old('title', $todo->title) }}" />
+                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                   placeholder="Complete task" name="title" value="{{ old('title', $todo->title) }}"/>
             @if ($errors->has('title'))
                 <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('title') }}</span>
             @endif
@@ -18,7 +18,8 @@
             <span class="text-gray-700 dark:text-gray-400">Description</span>
             <textarea
                 class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                rows="3" name="description" placeholder="Enter all about this todo">{{ old('description', $todo->description) }}</textarea>
+                rows="3" name="description"
+                placeholder="Enter all about this todo">{{ old('description', $todo->description) }}</textarea>
             @if ($errors->has('description'))
                 <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('description') }}</span>
             @endif
@@ -42,10 +43,11 @@
         <label class="block mt-6 text-sm">
             <span class="text-gray-700 dark:text-gray-400">folder</span>
             <select name="folder_id"
-                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                 <option value="0">-</option>
                 @foreach ($folders as $folder)
-                    <option value="{{ $folder->id }}" @if ($todo->folder && $todo->folder->id == $folder->id) selected @endif>
+                    <option value="{{ $folder->id }}"
+                            @if ($todo->folder && $todo->folder->id == $folder->id) selected @endif>
                         {{ $folder->name }}</option>
                 @endforeach
             </select>
@@ -59,41 +61,66 @@
             <div class="mt-2">
                 <label class="inline-flex items-center text-gray-600 dark:text-gray-400">
                     <input type="radio"
-                        class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        name="is_done" value="0" @if ($todo->is_done == 0) checked @endif />
+                           class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                           name="is_done" value="0" @if ($todo->is_done == 0) checked @endif />
                     <span class="ml-2">Ongoing</span>
                 </label>
                 <label class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
                     <input type="radio"
-                        class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        name="is_done" value="1" @if ($todo->is_done == 1) checked @endif />
+                           class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                           name="is_done" value="1" @if ($todo->is_done == 1) checked @endif />
                     <span class="ml-2">Done</span>
                 </label>
             </div>
             @if ($errors->has('is_done'))
                 <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('is_done') }}</span>
             @endif
-        </div>
+            {{--        </div class="mt-6 text-sm">--}}
 
-        <div class="mt-6 mr-4 pb-2 inline-block">
-            <button type="submit"
-                class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                <span>Edit</span>
-            </button>
-        </div>
-        <div class="mt-6 pb-2 inline-block">
-            <button id="delete-todo" type="button"
-                class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
-                <span>Delete</span>
-            </button>
+            <div class="flex mt-6 text-sm">
+                <label class="flex items-center dark:text-gray-400">
+                    <input type="checkbox" id="active-reminder" name="is_reminder_active"
+                           @if($todo->reminder_datetime	) checked @endif
+                           class="text-purple-600 form-checkbox focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"/>
+                    <span class="ml-2">Active reminder</span>
+                    @if ($errors->has('is_reminder_active'))
+                        <span
+                            class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('is_reminder_active') }}</span>
+                    @endif
+                </label>
+            </div>
+
+            <div id="reminder" class="flex mt-6 text-sm @if(!$todo->reminder_datetime) hidden @endif ">
+                <label class="flex items-center dark:text-gray-400">
+                    <input name="reminder_datetime" class="text-purple-600 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:bg-gray-700 dark:focus:shadow-outline-gray p-2 rounded-lg" type="datetime-local"
+                           value="{{$todo->reminder_datetime}}">
+                    @if ($errors->has('reminder_datetime'))
+                        <span
+                            class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('reminder_datetime') }}</span>
+                    @endif
+                </label>
+            </div>
+
+            <div class="mt-6 mr-4 pb-2 inline-block">
+                <button type="submit"
+                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    <span>Edit</span>
+                </button>
+            </div>
+            <div class="mt-6 pb-2 inline-block">
+                <button id="delete-todo" type="button"
+                        class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-red">
+                    <span>Delete</span>
+                </button>
+            </div>
         </div>
     </form>
 
     @section('scripts')
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            $(document).ready(function() {
-                $('#delete-todo').on('click', function(event) {
+            $(document).ready(function () {
+                $('#delete-todo').on('click', function (event) {
                     const dark = document.querySelector('#dark-input').value
                     Swal.fire({
                         title: 'Are You Sure?',
@@ -115,19 +142,27 @@
                                     dark: $('#dark-input').val()
                                 },
                                 dataType: 'JSON',
-                                success: function(response) {
+                                success: function (response) {
                                     console.log(response);
                                     if (response.status == 'ok') {
                                         window.location.href = "{{ route('todo.index') }}"
                                     }
                                 },
-                                error: function(response) {
+                                error: function (response) {
                                     console.log('error ' + response);
                                 }
                             });
                         }
                     });
                 });
+
+                $('#active-reminder').on('click', function () {
+                    if ($('#active-reminder').is(':checked')) {
+                        $('#reminder').removeClass('hidden');
+                    } else {
+                        $('#reminder').addClass('hidden');
+                    }
+                })
             });
         </script>
     @endsection

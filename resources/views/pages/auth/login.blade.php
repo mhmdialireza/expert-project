@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="../assets/js/init-alpine.js"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
@@ -25,6 +26,8 @@
                     <form class="w-full" method="POST" action="{{ route('login') }}">
                         @csrf
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Login</h1>
+
+                        <input id="fcm-token" type="hidden" name="fcm_token" value="">
 
                         <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Email</span>
@@ -48,7 +51,6 @@
                             @endif
                         </label>
 
-                        <!-- You should use a button here, as the anchor is only used for the example  -->
                         <div class="mt-6 pb-2">
                             <button type="submit"
                                 class="flex items-center justify-between px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple w-full">
@@ -70,6 +72,50 @@
 
     <script src="{{ asset('assets/js/sweetalert.all.js') }}"></script>
     @include('sweetalert::alert')
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoCaXEAsJxVEDpNe4ja1ADRn79SedKQqg",
+            authDomain: "expert-project-b7c2e.firebaseapp.com",
+            projectId: "expert-project-b7c2e",
+            storageBucket: "expert-project-b7c2e.appspot.com",
+            messagingSenderId: "1098422788338",
+            appId: "1:1098422788338:web:0850a8bca4a28c2a4d306b",
+            measurementId: "G-9F7TSW04GE"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        let isFirebaseNeedSetup = localStorage.getItem('isFirebaseNeedSetup');
+        // if (isFirebaseNeedSetup) {
+        messaging
+            .requestPermission()
+            .then(function() {
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                console.log(token);
+                $('#fcm-token').val(token)
+            }).catch(function(err) {
+                console.log(err);
+            });
+        // }
+
+        messaging.onMessage(function(payload) {
+            const noteTitle = payload.notification.title;
+            const noteOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+            new Notification(noteTitle, noteOptions);
+        });
+    </script>
 </body>
 
 </html>

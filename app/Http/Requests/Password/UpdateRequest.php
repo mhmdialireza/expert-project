@@ -26,7 +26,6 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:3'],
             'url' => ['active_url', 'required', 'string'],
-            'password' => ['required', 'string'],
             'folder_id' => ['required', 'string'],
             'dark' => ['string', 'required'],
         ];

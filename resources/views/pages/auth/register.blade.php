@@ -7,6 +7,7 @@
     <title>Sign up - Personal Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
 <body>
@@ -23,6 +24,8 @@
                     <form class="w-full" method="POST" action="{{ route('register') }}">
                         @csrf
                         <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">Sign up</h1>
+
+                        <input id="fcm-token" type="hidden" name="fcm_token" value="">
 
                         <label class="block text-sm">
                             <span class="text-gray-700 dark:text-gray-400">Name</span>
@@ -91,6 +94,50 @@
     <script src="{{ asset('assets/js/generate-key.js') }}"></script>
     <script src="{{ asset('assets/js/sweetalert.all.js') }}"></script>
     @include('sweetalert::alert')
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-messaging.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoCaXEAsJxVEDpNe4ja1ADRn79SedKQqg",
+            authDomain: "expert-project-b7c2e.firebaseapp.com",
+            projectId: "expert-project-b7c2e",
+            storageBucket: "expert-project-b7c2e.appspot.com",
+            messagingSenderId: "1098422788338",
+            appId: "1:1098422788338:web:0850a8bca4a28c2a4d306b",
+            measurementId: "G-9F7TSW04GE"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        let isFirebaseNeedSetup = localStorage.getItem('isFirebaseNeedSetup');
+        // if (isFirebaseNeedSetup) {
+        messaging
+            .requestPermission()
+            .then(function() {
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                console.log(token);
+                $('#fcm-token').val(token)
+            }).catch(function(err) {
+                console.log(err);
+            });
+        // }
+
+        messaging.onMessage(function(payload) {
+            const noteTitle = payload.notification.title;
+            const noteOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon,
+            };
+            new Notification(noteTitle, noteOptions);
+        });
+    </script>
 </body>
 
 </html>

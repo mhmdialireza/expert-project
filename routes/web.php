@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\FcmController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\SinglePageController;
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+
+Route::get('x/x/x',function (){
+    dd(\App\Models\Folder::first()->children->toArray());
+});
 
 Route::prefix('auth')->controller(AuthController::class)->group(function () {
     Route::get('login', 'loginPage')->name('login-page');
@@ -73,6 +78,10 @@ Route::middleware('auth')->group(function () {
         Route::post('get', 'getPassword')->name('password.get-password');
     });
 
+    Route::prefix('fcm')->controller(FcmController::class)->group(function () {
+        Route::post('create-or-update-token', 'createOrUpdateToken')->name('fcm.create-or-update-token');
+        Route::get('test', 'test')->name('fcm.create-or-update-token');
+    });
 });
 
 Route::fallback(function () {

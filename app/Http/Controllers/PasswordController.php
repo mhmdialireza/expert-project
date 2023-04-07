@@ -66,7 +66,26 @@ class PasswordController extends Controller
 
     public function update(UpdateRequest $request, Password $password)
     {
-        //
+        $inputs = $request->all();
+
+        if ($inputs['folder_id'] != $password->folder_id) {
+            $password->folder()->decrement('include');
+            if ($inputs['folder_id'] == 0) {
+                $inputs['folder_id'] = null;
+            } else {
+                Folder::find($inputs['folder_id'])->increment('include');
+            }
+        }
+
+        $password->update($inputs);
+
+        if ($inputs['dark'] == 'true') {
+            alert()->success('', 'Password info Updated Successfully')->background('#1A1C23');
+        } else {
+            alert()->success('', 'Password info Updated Successfully');
+        }
+
+        return redirect()->to(route('password.show', $password->id));
     }
 
     public function delete(Password $password, DeleteRequest $request)

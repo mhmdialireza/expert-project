@@ -23,7 +23,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        // dd(request()->all());
+//        dd(request()->all());
         return [
             'title' => ['required', 'string', 'min:3'],
             'description' => ['sometimes', 'required', 'string', 'min:3'],
@@ -31,6 +31,12 @@ class UpdateRequest extends FormRequest
             'folder_id' => ['required', 'string'],
             'is_done' => ['boolean', 'required'],
             'dark' => ['string', 'required'],
+            'is_reminder_active' => ['in:on'],
+            'reminder_datetime' => [
+//                'nullable',
+//                'required_if:is_reminder_active,on',//TODO: set better validation text
+//                'date_format:Y-m-d H:i'
+            ],
         ];
     }
 }

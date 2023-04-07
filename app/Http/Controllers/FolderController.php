@@ -12,7 +12,7 @@ class FolderController extends Controller
 {
     public function create(int $type)
     {
-        $from = match($type) {
+        $from = match ($type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
@@ -33,8 +33,8 @@ class FolderController extends Controller
 
         Folder::create([...$inputs, 'user_id' => Auth::id()]);
 
-        $type = (int) $inputs['type'];
-        $from = match($type) {
+        $type = (int)$inputs['type'];
+        $from = match ($type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
@@ -63,13 +63,13 @@ class FolderController extends Controller
 
     public function show(Folder $folder)
     {
-        $from = match($folder->type) {
+        $from = match ($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
 
-        $items = match($folder->type) {
+        $items = match ($folder->type) {
             1 => $folder->todos,
             2 => $folder->bookmarks,
             3 => $folder->passwords,
@@ -82,35 +82,46 @@ class FolderController extends Controller
 
     public function edit(Folder $folder)
     {
-        $from = match($folder->type) {
+        $from = match ($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
-        $folders = Folder::where('type', $folder->type)
-        ->where('id','!=',$folder->id)
-        //TODO: even no children 
-        ->get();
+        $notInIds = [...$folder->children()->pluck('id'), $folder->id];
+        $folders = Folder::whereNotIn('id', $notInIds)->get();
 
-        return view('pages.folder.edit', compact('folder', 'from','folders'));
+        return view('pages.folder.edit', compact('folder', 'from', 'folders'));
     }
 
     public function update(Folder $folder, UpdateRequest $request)
     {
-        $folder->update($request->all());
-        $from = match($folder->type) {
+        $inputs = $request->all();
+
+        if ($inputs['parent_id'] != $folder->parent_id) {
+            $folder->parent()->decrement('include');
+            if ($inputs['parent_id'] == 0) {
+                $inputs['parent_id'] = null;
+            } else {
+                Folder::find($inputs['parent_id'])->increment('include');
+            }
+        }
+
+        $folder->update($inputs);
+        $from = match ($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
+        $notInIds = [...$folder->children()->pluck('id'), $folder->id];
+        $folders = Folder::whereNotIn('id', $notInIds)->get();
 
-        if ($request->all()['dark'] == 'true') {
+        if ($inputs['dark'] == 'true') {
             alert()->success('', 'Folder Updated Successfully')->background('#1A1C23');
         } else {
             alert()->success('', 'Folder Updated Successfully');
         }
 
-        return view('pages.folder.edit', compact('folder', 'from'));
+        return view('pages.folder.edit', compact('folder', 'from', 'folders'));
     }
 
     public function delete(Folder $folder, DeleteRequest $request)
@@ -128,5 +139,17 @@ class FolderController extends Controller
         }
 
         return response()->json(['status' => 'ok', 'message' => 'Folder Successfully Deleted']);
+    }
+
+    private function convertTo1d($inputArray)
+    {
+        $outputArray = [];
+        for ($i = 0; $i < count($inputArray); $i++) {
+            for ($j = 0; $j < count($inputArray[$i]); $j++) {
+                $outputArray[] = $inputArray[$i][$j];
+            }
+        }
+
+        return $outputArray;
     }
 }

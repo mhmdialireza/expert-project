@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->tinyInteger('priority')->default(3);
             $table->boolean('is_done')->default(0);
+            $table->dateTime('reminder_datetime')->nullable();
             $table->foreignId('folder_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();

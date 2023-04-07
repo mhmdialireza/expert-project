@@ -7,6 +7,7 @@ use App\Http\Requests\Todo\StoreRequest;
 use App\Http\Requests\Todo\UpdateRequest;
 use App\Models\Folder;
 use App\Models\Todo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class TodoController extends Controller
@@ -17,9 +18,9 @@ class TodoController extends Controller
     {
         $todos = Auth::user()->todos()->where('folder_id', null)->get();
         $folders = Auth::user()->folders()
-        ->where('parent_id', null)
-        ->where('type', 1)
-        ->get();
+            ->where('parent_id', null)
+            ->where('type', 1)
+            ->get();
         $from = $this->from;
 
         return view('pages.todo.index', compact('folders', 'todos', 'from'));
@@ -66,6 +67,15 @@ class TodoController extends Controller
     public function update(Todo $todo, UpdateRequest $request)
     {
         $inputs = $request->all();
+
+        if ($inputs['is_reminder_active'] ?? false) {
+            if ($inputs['reminder_datetime'] != null) {
+                $inputs['reminder_datetime'] = Carbon::createFromDate($inputs['reminder_datetime'])->format('Y-m-d H:i');
+            }
+        } else {
+            $inputs['reminder_datetime'] = null;
+        }
+
         if ($inputs['folder_id'] != $todo->folder_id) {
             $todo->folder()->decrement('include');
             if ($inputs['folder_id'] == 0) {
@@ -102,7 +112,7 @@ class TodoController extends Controller
 
     public function changeStatus(Todo $todo)
     {
-        $todo->is_done = 1 - (int) $todo->is_done;
+        $todo->is_done = 1 - (int)$todo->is_done;
         $todo->save();
 
         return back();

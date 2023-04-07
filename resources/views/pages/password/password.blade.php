@@ -5,31 +5,29 @@
         @csrf
         @method('PUT')
         <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Title</span>
+            <span class="text-gray-700 dark:text-gray-400">Name</span>
             <input autocomplete="off"
                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="Complete task" name="title" value="{{ old('title', $password->title) }}" />
-            @if ($errors->has('title'))
-                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('title') }}</span>
+                placeholder="Github" name="name" value="{{ old('name', $password->name) }}" />
+            @if ($errors->has('name'))
+                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('name') }}</span>
             @endif
         </label>
 
         <label class="block mt-6 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Description</span>
-            <textarea
-                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                rows="3" name="description" placeholder="Enter all about this password">{{ old('description', $password->description) }}</textarea>
-            @if ($errors->has('description'))
-                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('description') }}</span>
+            <span class="text-gray-700 dark:text-gray-400">Url</span>
+            <input autocomplete="off"
+                   class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                   placeholder="www.github.com" name="url" value="{{ old('url', $password->name) }}" />
+            @if ($errors->has('url'))
+                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('url') }}</span>
             @endif
         </label>
-        
-        <input id="dark-input" name='dark' type="hidden" x-model='dark'>
 
         <label class="block mt-6 text-sm">
             <span class="text-gray-700 dark:text-gray-400">folder</span>
             <select name="folder_id"
-                class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
+                    class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray">
                 <option value="0">-</option>
                 @foreach ($folders as $folder)
                     <option value="{{ $folder->id }}" @if ($password->folder && $password->folder->id == $folder->id) selected @endif>
@@ -41,26 +39,8 @@
             @endif
         </label>
 
-        <div class="mt-6 text-sm">
-            <span class="text-gray-700 dark:text-gray-400">Status</span>
-            <div class="mt-2">
-                <label class="inline-flex items-center text-gray-600 dark:text-gray-400">
-                    <input type="radio"
-                        class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        name="is_done" value="0" @if ($password->is_done == 0) checked @endif />
-                    <span class="ml-2">Ongoing</span>
-                </label>
-                <label class="inline-flex items-center ml-6 text-gray-600 dark:text-gray-400">
-                    <input type="radio"
-                        class="text-purple-600 form-radio focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        name="is_done" value="1" @if ($password->is_done == 1) checked @endif />
-                    <span class="ml-2">Done</span>
-                </label>
-            </div>
-            @if ($errors->has('is_done'))
-                <span class="text-xs text-red-600 dark:text-red-400">{{ $errors->first('is_done') }}</span>
-            @endif
-        </div>
+
+        <input id="dark-input" name='dark' type="hidden" x-model='dark'>
 
         <div class="mt-6 mr-4 pb-2 inline-block">
             <button type="submit"
@@ -97,7 +77,7 @@
                                 data: {
                                     "_token": "{{ csrf_token() }}",
                                     id: {{ $password->id }},
-                                    dark: $('#dark-input').val()
+                                    dark: $("#dark-input").val()
                                 },
                                 dataType: 'JSON',
                                 success: function(response) {
