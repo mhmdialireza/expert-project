@@ -12,12 +12,12 @@ class FolderController extends Controller
 {
     public function create(int $type)
     {
-        $from = match ($type) {
+        $from = match($type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
-        $folders = Folder::where('type', $type)->get();
+        $folders = Folder::where('type', $type)->where('user_id', auth()->id())->get();
 
         return view('pages.folder.create', compact('type', 'from', 'folders'));
     }
@@ -33,8 +33,8 @@ class FolderController extends Controller
 
         Folder::create([...$inputs, 'user_id' => Auth::id()]);
 
-        $type = (int)$inputs['type'];
-        $from = match ($type) {
+        $type = (int) $inputs['type'];
+        $from = match($type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
@@ -63,13 +63,13 @@ class FolderController extends Controller
 
     public function show(Folder $folder)
     {
-        $from = match ($folder->type) {
+        $from = match($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
 
-        $items = match ($folder->type) {
+        $items = match($folder->type) {
             1 => $folder->todos,
             2 => $folder->bookmarks,
             3 => $folder->passwords,
@@ -82,13 +82,13 @@ class FolderController extends Controller
 
     public function edit(Folder $folder)
     {
-        $from = match ($folder->type) {
+        $from = match($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',
         };
         $notInIds = [...$folder->children()->pluck('id'), $folder->id];
-        $folders = Folder::whereNotIn('id', $notInIds)->get();
+        $folders = Folder::whereNotIn('id', $notInIds)->where('user_id', auth()->id())->get();
 
         return view('pages.folder.edit', compact('folder', 'from', 'folders'));
     }
@@ -107,7 +107,7 @@ class FolderController extends Controller
         }
 
         $folder->update($inputs);
-        $from = match ($folder->type) {
+        $from = match($folder->type) {
             1 => 'todos',
             2 => 'bookmarks',
             3 => 'passwords',

@@ -14,7 +14,7 @@ class NotificationService
             "registration_ids" => [$fcmToken],
             "notification" => [
                 "title" => "Todo Reminder: \"$todo->title\"",
-                "body" => substr($todo->description, 0, 40) . '...',
+                "body" => substr($todo->description, 0, 30),
                 "image" => "https://s2.uupload.ir/files/favicon_(2)_iimk.png",
             ],
         ]);
